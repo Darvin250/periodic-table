@@ -2,7 +2,7 @@
 // CONFIGURATION
 // Replace the URL below with your own published Google Sheet CSV link
 // =============================================================
-const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRopMKgYBI--xMybsFJ6XzxzSYt44-sL_9JUAk3N0MAIVUDxh1z2UTiRTrI6rT2fJuXVKhLU0sSRvr/pubhtml';
+const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTRopMKgYBI--xMybsFJ6XzxzSYt44-sL_9JUAk3N0MAIVUDxh1z2UTiRTrI6rT2fJuXVKhLU0sSRvr/pub?output=csv';
 
 // Global Three.js variables
 let camera, scene, renderer, controls;
@@ -127,9 +127,10 @@ async function fetchSheetData() {
         csvUrl = csvUrl.replace(/\/pub(\?.*)?$/, '/pub?output=csv');
     }
 
-    // 1. Attempt to fetch from live published Google Sheet
+    // 1. Attempt to fetch from live published Google Sheet (with cache buster)
     try {
-        const response = await fetch(csvUrl);
+        const cacheBuster = (csvUrl.includes('?') ? '&' : '?') + '_nocache=' + Date.now();
+        const response = await fetch(csvUrl + cacheBuster, { cache: 'no-store' });
         if (response.ok) {
             const csvText = await response.text();
             const parsed = parseCSV(csvText);
