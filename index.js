@@ -122,9 +122,17 @@ function parseCSV(text) {
 }
 
 async function fetchSheetData() {
+    // Normalize Google Sheet URL to ensure it requests CSV format even if /pubhtml was pasted
+    let csvUrl = GOOGLE_SHEET_CSV_URL.trim();
+    if (csvUrl.endsWith('/pubhtml')) {
+        csvUrl = csvUrl.replace(/\/pubhtml$/, '/pub?output=csv');
+    } else if (csvUrl.includes('/pub') && !csvUrl.includes('output=csv')) {
+        csvUrl = csvUrl.replace(/\/pub(\?.*)?$/, '/pub?output=csv');
+    }
+
     // 1. Attempt to fetch from live published Google Sheet
     try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL);
+        const response = await fetch(csvUrl);
         if (response.ok) {
             const csvText = await response.text();
             const parsed = parseCSV(csvText);
