@@ -121,8 +121,8 @@ body {
 }
 
 .dot-red { background-color: #EF3022; }
-.dot-orange { background-color: #FF8C00; }
-.dot-green { background-color: #3AF48F; }
+.dot-orange { background-color: #FDCA35; }
+.dot-green { background-color: #3A9F48; }
 
 /* Menu (Bottom) */
 #menu {
@@ -167,7 +167,6 @@ body {
     border-radius: 4px;
     user-select: none;
     cursor: default;
-    background-color: rgba(5, 5, 5, 0.85);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 

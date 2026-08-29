@@ -157,22 +157,25 @@ async function fetchSheetData() {
 
 function getTileStyles(netWorth) {
     if (netWorth < 100000) {
+        // Red: #EF3022
         return {
-            border: '1.5px solid rgba(239, 48, 34, 0.95)',
+            border: '1.5px solid #EF3022',
             boxShadow: '0 0 10px rgba(239, 48, 34, 0.8)',
-            background: 'rgba(20, 3, 3, 0.88)'
+            background: 'rgba(239, 48, 34, 0.22)'
         };
     } else if (netWorth <= 200000) {
+        // Orange / Yellow: #FDCA35
         return {
-            border: '1.5px solid rgba(255, 140, 0, 0.95)',
-            boxShadow: '0 0 10px rgba(255, 140, 0, 0.8)',
-            background: 'rgba(20, 10, 2, 0.88)'
+            border: '1.5px solid #FDCA35',
+            boxShadow: '0 0 10px rgba(253, 202, 53, 0.8)',
+            background: 'rgba(253, 202, 53, 0.22)'
         };
     } else {
+        // Green: #3A9F48
         return {
-            border: '1.5px solid rgba(58, 244, 143, 0.95)',
-            boxShadow: '0 0 10px rgba(58, 244, 143, 0.8)',
-            background: 'rgba(2, 20, 10, 0.88)'
+            border: '1.5px solid #3A9F48',
+            boxShadow: '0 0 10px rgba(58, 159, 72, 0.8)',
+            background: 'rgba(58, 159, 72, 0.22)'
         };
     }
 }
