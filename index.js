@@ -31,9 +31,6 @@ function handleCredentialResponse(response) {
     }
 }
 
-function loginAsGuest() {
-    showVisualization('Guest User', null);
-}
 
 function showVisualization(userName, userPicture) {
     // Hide login screen and display 3D visualization container

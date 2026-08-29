@@ -23,23 +23,22 @@
     <div id="login-container">
         <div class="login-box">
             <h2>Welcome Back</h2>
-            <p>Please sign in with your Google account to access the 3D Periodic Table.</p>
+            <p>Please sign in with your Google account</p>
 
             <!-- Google Sign-In Button -->
             <div id="g_id_onload"
                 data-client_id="457265073801-9getok6g5ms8qpkkj3baamk98v7iddgt.apps.googleusercontent.com"
-                data-callback="handleCredentialResponse" data-auto_prompt="false">
+                data-callback="handleCredentialResponse" 
+                data-auto_prompt="false">
             </div>
-            <div class="g_id_signin" data-type="standard" data-size="large" data-theme="filled_blue"
-                data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left">
+            <div class="g_id_signin" 
+                data-type="standard" 
+                data-size="large" 
+                data-theme="outline"
+                data-text="sign_in_with" 
+                data-shape="rectangular" 
+                data-logo_alignment="left">
             </div>
-
-            <div class="divider">
-                <span>OR</span>
-            </div>
-
-            <!-- Guest Login Button for Evaluation / Testing -->
-            <button id="guest-btn" class="guest-button" onclick="loginAsGuest()">Continue as Guest / Demo</button>
         </div>
     </div>
 
@@ -49,7 +48,7 @@
         <div id="top-bar">
             <div id="user-info">
                 <img id="user-avatar" src="" alt="Avatar" style="display: none;">
-                <span id="user-name">Guest User</span>
+                <span id="user-name"></span>
             </div>
             <button id="logout-btn" onclick="logout()">Sign Out</button>
         </div>
@@ -59,9 +58,9 @@
 
         <!-- Legend -->
         <div id="legend">
-            <span class="legend-item"><span class="legend-dot dot-red"></span> Red: &lt; $100K</span>
-            <span class="legend-item"><span class="legend-dot dot-orange"></span> Orange: $100K - $200K</span>
-            <span class="legend-item"><span class="legend-dot dot-green"></span> Green: &gt; $200K</span>
+            <div><span class="dot dot-red"></span> Red: &lt; $100K</div>
+            <div><span class="dot dot-orange"></span> Orange: $100K - $200K</div>
+            <div><span class="dot dot-green"></span> Green: &gt; $200K</div>
         </div>
 
         <!-- Layout Switcher Menu -->
