@@ -155,13 +155,25 @@ async function fetchSheetData() {
 // 3. Tile Color Coding Based on Net Worth (Requirement 5)
 // =============================================================
 
-function getTileColor(netWorth) {
+function getTileStyles(netWorth) {
     if (netWorth < 100000) {
-        return 'rgba(239, 48, 34, 0.75)';   // Red: < $100K
+        return {
+            border: '1.5px solid rgba(239, 48, 34, 0.95)',
+            boxShadow: '0 0 10px rgba(239, 48, 34, 0.8)',
+            background: 'rgba(20, 3, 3, 0.88)'
+        };
     } else if (netWorth <= 200000) {
-        return 'rgba(255, 140, 0, 0.75)';  // Orange: $100K - $200K
+        return {
+            border: '1.5px solid rgba(255, 140, 0, 0.95)',
+            boxShadow: '0 0 10px rgba(255, 140, 0, 0.8)',
+            background: 'rgba(20, 10, 2, 0.88)'
+        };
     } else {
-        return 'rgba(58, 244, 143, 0.75)';  // Green: > $200K
+        return {
+            border: '1.5px solid rgba(58, 244, 143, 0.95)',
+            boxShadow: '0 0 10px rgba(58, 244, 143, 0.8)',
+            background: 'rgba(2, 20, 10, 0.88)'
+        };
     }
 }
 
@@ -196,15 +208,30 @@ async function initThreeJS() {
 
         const element = document.createElement('div');
         element.className = 'element';
-        element.style.backgroundColor = getTileColor(item.netWorthNumber);
+        
+        // Apply Net Worth tier styling (glow border & tint)
+        const style = getTileStyles(item.netWorthNumber);
+        element.style.border = style.border;
+        element.style.boxShadow = style.boxShadow;
+        element.style.backgroundColor = style.background;
 
-        // Header (Age & Country)
+        // Header Row: Country (Top Left) & Age (Top Right)
         const headerRow = document.createElement('div');
         headerRow.className = 'header-row';
-        headerRow.innerHTML = `<span>${item.age} yrs</span><span>${item.country}</span>`;
+        
+        const countryEl = document.createElement('span');
+        countryEl.className = 'country';
+        countryEl.textContent = item.country;
+        
+        const ageEl = document.createElement('span');
+        ageEl.className = 'age';
+        ageEl.textContent = item.age;
+        
+        headerRow.appendChild(countryEl);
+        headerRow.appendChild(ageEl);
         element.appendChild(headerRow);
 
-        // Photo Avatar with fallback initials
+        // Photo (Square) with fallback initials
         const photoWrap = document.createElement('div');
         photoWrap.className = 'photo-wrap';
 
@@ -212,7 +239,6 @@ async function initThreeJS() {
         img.src = item.photo;
         img.alt = item.name;
         img.onerror = function () {
-            // Replace broken image with initials
             this.style.display = 'none';
             const initialsSpan = document.createElement('span');
             initialsSpan.className = 'initials';
@@ -222,23 +248,17 @@ async function initThreeJS() {
         photoWrap.appendChild(img);
         element.appendChild(photoWrap);
 
-        // Name
+        // Name (Bold)
         const nameEl = document.createElement('div');
         nameEl.className = 'name';
         nameEl.textContent = item.name;
         element.appendChild(nameEl);
 
-        // Interest
+        // Interest (Subtitle)
         const interestEl = document.createElement('div');
         interestEl.className = 'interest';
         interestEl.textContent = item.interest;
         element.appendChild(interestEl);
-
-        // Net Worth
-        const netWorthEl = document.createElement('div');
-        netWorthEl.className = 'net-worth';
-        netWorthEl.textContent = item.netWorthRaw;
-        element.appendChild(netWorthEl);
 
         // Create Three.js CSS3DObject
         const objectCSS = new THREE.CSS3DObject(element);
