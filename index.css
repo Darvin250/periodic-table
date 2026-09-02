@@ -45,40 +45,6 @@ body {
     margin-bottom: 24px;
 }
 
-.login-divider {
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-    line-height: 0.1em;
-    margin: 18px 0;
-}
-
-.login-divider span {
-    background: #ffffff;
-    padding: 0 10px;
-    color: #999999;
-    font-size: 12px;
-    text-transform: uppercase;
-}
-
-#guest-btn {
-    width: 100%;
-    padding: 10px 16px;
-    background: #f5f5f5;
-    color: #333333;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-#guest-btn:hover {
-    background: #e8e8e8;
-    border-color: #bbbbbb;
-}
-
 /* ==================== 3D Visualization Screen ==================== */
 #visualization-container {
     position: relative;
@@ -154,9 +120,17 @@ body {
     vertical-align: middle;
 }
 
-.dot-red { background-color: #EF3022; }
-.dot-orange { background-color: #FDCA35; }
-.dot-green { background-color: #3A9F48; }
+.dot-red {
+    background-color: #EF3022;
+}
+
+.dot-orange {
+    background-color: #FDCA35;
+}
+
+.dot-green {
+    background-color: #3A9F48;
+}
 
 /* Menu (Bottom) */
 #menu {
