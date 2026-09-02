@@ -19,11 +19,12 @@ An interactive 3D Data Visualization Web Application built with **Three.js (CSS3
    - 🔴 **Red**: Net Worth `< $100,000`
    - 🟠 **Orange**: Net Worth `$100,000 - $200,000`
    - 🟢 **Green**: Net Worth `> $200,000`
-5. **4 Formats / 3D Layout Transformations**:
+5. **5 Formats / 3D Layout Transformations**:
    - **Table**: $20 \times 10$ arrangement (20 columns, 10 rows).
    - **Sphere**: Fibonacci spherical distribution.
    - **Helix**: Intertwined **Double Helix** (2 strands with $180^\circ$ phase offset).
    - **Grid (Image C)**: $5 \times 4 \times 10$ 3D lattice (5 columns, 4 rows, 10 layers deep).
+   - **Pyramid (Tetrahedron)**: 4-face triangular pyramid arrangement distributing elements across all 4 faces with outward surface orientation.
 6. **Interactive Controls**:
    - Smooth 3D Trackball orbital navigation (mouse rotate, scroll to zoom, right-click to pan).
    - Smooth animated transitions powered by TWEEN.js.

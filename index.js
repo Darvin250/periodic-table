@@ -7,7 +7,7 @@ const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT
 // Global Three.js variables
 let camera, scene, renderer, controls;
 const objects = [];
-const targets = { table: [], sphere: [], helix: [], grid: [] };
+const targets = { table: [], sphere: [], helix: [], grid: [], pyramid: [] };
 let isInitialized = false;
 
 // =============================================================
@@ -339,6 +339,87 @@ async function initThreeJS() {
         targets.grid.push(object);
     }
 
+    // 5. PYRAMID (Tetrahedron) Arrangement: 4-face equilateral triangular pyramid
+    const pyramidR = 1500;
+    const v0 = new THREE.Vector3(0, pyramidR, 0); // Top Apex
+    const yBase = -pyramidR / 3;
+    const rBase = pyramidR * (2 * Math.SQRT2 / 3);
+
+    const v1 = new THREE.Vector3(rBase * Math.cos(0), yBase, rBase * Math.sin(0));
+    const v2 = new THREE.Vector3(rBase * Math.cos(2 * Math.PI / 3), yBase, rBase * Math.sin(2 * Math.PI / 3));
+    const v3 = new THREE.Vector3(rBase * Math.cos(4 * Math.PI / 3), yBase, rBase * Math.sin(4 * Math.PI / 3));
+
+    // 4 triangular faces: 3 side faces + 1 bottom face
+    const pyramidFaces = [
+        { a: v0, b: v1, c: v2 }, // Front-Right Face
+        { a: v0, b: v2, c: v3 }, // Back Face
+        { a: v0, b: v3, c: v1 }, // Front-Left Face
+        { a: v1, b: v2, c: v3 }  // Bottom Face
+    ];
+
+    const faceData = pyramidFaces.map(face => {
+        const centroid = new THREE.Vector3()
+            .add(face.a).add(face.b).add(face.c)
+            .divideScalar(3);
+
+        const normal = centroid.clone().normalize();
+        const midBC = new THREE.Vector3().addVectors(face.b, face.c).multiplyScalar(0.5);
+        const up = new THREE.Vector3().subVectors(face.a, midBC).normalize();
+        const right = new THREE.Vector3().crossVectors(up, normal).normalize();
+        const trueUp = new THREE.Vector3().crossVectors(normal, right).normalize();
+
+        const basisMatrix = new THREE.Matrix4();
+        basisMatrix.makeBasis(right, trueUp, normal);
+        const rotation = new THREE.Euler().setFromRotationMatrix(basisMatrix);
+
+        return {
+            a: face.a,
+            b: face.b,
+            c: face.c,
+            rotation: rotation
+        };
+    });
+
+    const itemsPerFace = Math.ceil(objects.length / 4);
+
+    for (let i = 0; i < objects.length; i++) {
+        const faceIndex = Math.min(Math.floor(i / itemsPerFace), 3);
+        const fData = faceData[faceIndex];
+
+        const indexOnFace = i - faceIndex * itemsPerFace;
+        const itemsOnThisFace = (faceIndex === 3) ? (objects.length - 3 * itemsPerFace) : itemsPerFace;
+
+        // Number of triangular rows needed for this face
+        const K = Math.max(1, Math.ceil((Math.sqrt(1 + 8 * itemsOnThisFace) - 1) / 2));
+        
+        // Row and column of element within the triangular face lattice
+        const r = Math.floor((Math.sqrt(1 + 8 * indexOnFace) - 1) / 2);
+        const c = indexOnFace - (r * (r + 1)) / 2;
+
+        const v = (r + 0.6) / (K + 0.2);
+        const u = (c + 0.5) / (r + 1);
+
+        const pos = new THREE.Vector3()
+            .copy(fData.a)
+            .multiplyScalar(1 - v)
+            .add(
+                new THREE.Vector3()
+                    .copy(fData.b)
+                    .multiplyScalar((1 - u) * v)
+            )
+            .add(
+                new THREE.Vector3()
+                    .copy(fData.c)
+                    .multiplyScalar(u * v)
+            );
+
+        const object = new THREE.Object3D();
+        object.position.copy(pos);
+        object.rotation.copy(fData.rotation);
+
+        targets.pyramid.push(object);
+    }
+
     // =============================================================
     // 6. Renderer & Trackball Controls Setup
     // =============================================================
@@ -357,6 +438,7 @@ async function initThreeJS() {
     setupButtonListener('sphere', targets.sphere);
     setupButtonListener('helix', targets.helix);
     setupButtonListener('grid', targets.grid);
+    setupButtonListener('pyramid', targets.pyramid);
 
     // Initial transition into Table view
     transform(targets.table, 2000);
@@ -377,7 +459,7 @@ function setupButtonListener(buttonId, targetLayout) {
 }
 
 function setActiveButton(buttonId) {
-    const buttons = ['table', 'sphere', 'helix', 'grid'];
+    const buttons = ['table', 'sphere', 'helix', 'grid', 'pyramid'];
     buttons.forEach(id => {
         const btn = document.getElementById(id);
         if (btn) {
